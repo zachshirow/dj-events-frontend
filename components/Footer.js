@@ -7,7 +7,7 @@ export default function Footer() {
 			<p>Copyright &copy; DJ Events 2022</p>
 			<p>
 				<Link href="/about">
-					<a>About this project {"->"}</a>
+					<a>About this project →</a>
 				</Link>
 			</p>
 		</footer>
