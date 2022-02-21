@@ -1,5 +1,6 @@
 import { FaPencilAlt, FaTimes } from "react-icons/fa";
 import { useRouter } from "next/router";
+import QueryString from "qs";
 import Layout from "@/components/Layout";
 import Link from "next/link";
 import Image from "next/image";
@@ -12,11 +13,23 @@ export default function EventPage({ evt }) {
 		console.log("delete");
 	}
 
+	const id = evt.id;
+
+	let { name, date, time, slug, performers, description, venue, address } =
+		evt.attributes;
+
+	date = new Date(date).toLocaleDateString("en-US");
+
+	const image =
+		evt.attributes.image.data.attributes.formats.large === undefined
+			? evt.attributes.image.data.attributes.formats.medium
+			: evt.attributes.image.data.attributes.formats.large;
+
 	return (
 		<Layout>
 			<div className={styles.event}>
 				<div className={styles.controls}>
-					<Link href={`/events/edit/${evt.id}`}>
+					<Link href={`/events/edit/${id}`}>
 						<a>
 							<FaPencilAlt /> Edit Event
 						</a>
@@ -27,21 +40,26 @@ export default function EventPage({ evt }) {
 				</div>
 
 				<span>
-					{evt.date} at {evt.time}
+					{date} at {time}
 				</span>
-				<h1>{evt.name}</h1>
-				{evt.image && (
+				<h1>{name}</h1>
+				{image && (
 					<div className={styles.image}>
-						<Image src={evt.image} alt={evt.name} width={960} height={600} />
+						<Image
+							src={image.url}
+							alt={name}
+							width={image.width}
+							height={image.height}
+						/>
 					</div>
 				)}
 
 				<h3>Performers</h3>
-				<p>{evt.performers}</p>
+				<p>{performers}</p>
 				<h3>Description</h3>
-				<p>{evt.description}</p>
-				<h3>Venue: {evt.venue}</h3>
-				<p>{evt.address}</p>
+				<p>{description}</p>
+				<h3>Venue: {venue}</h3>
+				<p>{address}</p>
 				<Link href="/events/">
 					<a className={styles.back}>← Go Back</a>
 				</Link>
@@ -52,10 +70,11 @@ export default function EventPage({ evt }) {
 
 export async function getStaticPaths() {
 	const res = await fetch(`${API_URL}/api/events`);
-	const events = await res.json();
+	const resJson = await res.json();
+	const events = resJson.data;
 
 	const paths = events.map((evt) => {
-		return { params: { slug: evt.slug } };
+		return { params: { slug: evt.attributes.slug } };
 	});
 
 	return {
@@ -65,10 +84,24 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { slug } }) {
-	const res = await fetch(`${API_URL}/api/events/${slug}`);
+	const query = QueryString.stringify(
+		{
+			filters: {
+				slug: {
+					$eq: slug,
+				},
+			},
+			populate: "image",
+		},
+		{
+			encodeValuesOnly: true,
+		}
+	);
 
-	const events = await res.json();
+	const res = await fetch(`${API_URL}/api/events?${query}`);
 
+	const resJson = await res.json();
+	const events = resJson.data;
 	return { props: { evt: events[0] }, revalidate: 1 };
 }
 
