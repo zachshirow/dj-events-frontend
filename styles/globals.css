@@ -1,14 +1,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
+@font-face {
+	font-family: "samim";
+	src: url("/samim.eot"), url("/samim.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "samim-bold";
+	src: url("/samim-bold.eot"), url("/samim-bold.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
+	font-family: "Poppins", "samim";
 	padding: 0;
 }
 
 html,
 body {
-	font-family: "Poppins", sans-serif;
+	font-family: "Poppins", "samim";
 	line-height: 1.8;
 }
 
@@ -52,6 +66,22 @@ h1 {
 }
 
 .btn-secondary:hover {
+	opacity: 0.8;
+}
+
+.btn-tertiary {
+	font: inherit;
+	font-size: 13px;
+	background-color: #f1f1f1;
+	color: #777 !important;
+	border: 0;
+	border-radius: 5px;
+	padding: 5px 15px;
+	margin: 0 5px;
+	cursor: pointer;
+}
+
+.btn-secondary-outline:hover {
 	opacity: 0.8;
 }
 
