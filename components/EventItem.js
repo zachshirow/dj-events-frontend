@@ -7,7 +7,10 @@ export default function EventItem({ evt }) {
 
 	date = new Date(date).toLocaleDateString("en-US");
 
-	const image = evt.image.data.attributes.formats.small.url;
+	let image = false;
+	if (evt.image.data !== null) {
+		image = evt.image.data.attributes.formats.small.url;
+	}
 
 	return (
 		<div className={styles.event}>

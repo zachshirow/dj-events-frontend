@@ -19,14 +19,18 @@ export default function EventPage({ evt }) {
 		evt.attributes;
 
 	date = new Date(date).toLocaleDateString("en-US");
+	console.log("image");
 
-	const image =
-		evt.attributes.image.data.attributes.formats.large === undefined
-			? evt.attributes.image.data.attributes.formats.medium
-			: evt.attributes.image.data.attributes.formats.large;
+	let image = false;
+	if (evt.attributes.image.data !== null) {
+		image = evt.attributes.image.data.attributes.formats.medium.url;
+	}
 
 	return (
 		<Layout>
+			<Link href="/events/">
+				<a className={styles.back}>← Go Back</a>
+			</Link>
 			<div className={styles.event}>
 				<div className={styles.controls}>
 					<Link href={`/events/edit/${id}`}>
@@ -43,13 +47,14 @@ export default function EventPage({ evt }) {
 					{date} at {time}
 				</span>
 				<h1>{name}</h1>
+
 				{image && (
 					<div className={styles.image}>
 						<Image
-							src={image.url}
+							src={image ? image : "/images/event-default.png"}
 							alt={name}
-							width={image.width}
-							height={image.height}
+							width={960}
+							height={600}
 						/>
 					</div>
 				)}
@@ -60,9 +65,6 @@ export default function EventPage({ evt }) {
 				<p>{description}</p>
 				<h3>Venue: {venue}</h3>
 				<p>{address}</p>
-				<Link href="/events/">
-					<a className={styles.back}>← Go Back</a>
-				</Link>
 			</div>
 		</Layout>
 	);
