@@ -8,6 +8,7 @@ import Link from "next/link";
 import { API_URL } from "@/config/index.js";
 import Input from "@/components/Input";
 import Image from "next/image";
+import Modal from "@/components/Modal";
 
 import styles from "@/styles/Form.module.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,6 +33,8 @@ export default function EditEventPage({ evt }) {
 			? evt.data.attributes.image.data.attributes.formats.small.url
 			: null
 	);
+
+	const [showModal, setShowModal] = useState(false);
 
 	const router = useRouter();
 
@@ -146,10 +149,22 @@ export default function EditEventPage({ evt }) {
 			)}
 
 			<div>
-				<button className="btn-secondary">
+				<button
+					className="btn-secondary"
+					onClick={() => {
+						setShowModal(true);
+					}}>
 					<FaImage /> Set Image
 				</button>
 			</div>
+
+			<Modal
+				show={showModal}
+				onClose={() => {
+					setShowModal(false);
+				}}>
+				Image Upload
+			</Modal>
 		</Layout>
 	);
 }
