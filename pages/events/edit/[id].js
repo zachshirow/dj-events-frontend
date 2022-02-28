@@ -14,10 +14,11 @@ import styles from "@/styles/Form.module.css";
 import "react-toastify/dist/ReactToastify.css";
 import QueryString from "qs";
 import { FaImage } from "react-icons/fa";
+import ImageUpload from "@/components/ImageUpload";
 
 export default function EditEventPage({ evt }) {
 	const evtData = evt.data.attributes;
-
+	const id = evt.data.id;
 	const [values, setValues] = useState({
 		name: evtData.name,
 		performers: evtData.performers,
@@ -70,6 +71,26 @@ export default function EditEventPage({ evt }) {
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
 		setValues({ ...values, [name]: value });
+	};
+
+	const imageUploaded = async (imageData) => {
+		const imageId = imageData.id;
+		const imageUrl = imageData.formats.small.url;
+
+		const res = await fetch(`${API_URL}/api/events/${evt.data.id}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ data: { image: imageId } }),
+		});
+
+		if (!res.ok) {
+			toast.error("something went wrong");
+		} else {
+			setImagePreview(imageUrl);
+			setShowModal(false);
+		}
 	};
 
 	return (
@@ -134,37 +155,40 @@ export default function EditEventPage({ evt }) {
 				<input type="submit" value="Update Event" className="btn" />
 			</form>
 
-			<h2>Event Image</h2>
-			{imagePreview ? (
-				<Image
-					alt="Preview Image"
-					src={imagePreview}
-					height={200}
-					width={340}
-				/>
-			) : (
-				<div>
-					<p>No Image Uploaded</p>
-				</div>
-			)}
-
 			<div>
-				<button
-					className="btn-secondary"
-					onClick={() => {
-						setShowModal(true);
-					}}>
-					<FaImage /> Set Image
-				</button>
-			</div>
+				<h2>Event Image</h2>
+				{imagePreview ? (
+					<Image
+						alt="Preview Image"
+						src={imagePreview}
+						height={200}
+						width={340}
+					/>
+				) : (
+					<div>
+						<p>No Image Uploaded</p>
+					</div>
+				)}
 
-			<Modal
-				show={showModal}
-				onClose={() => {
-					setShowModal(false);
-				}}>
-				Image Upload
-			</Modal>
+				<div>
+					<button
+						className="btn-secondary"
+						onClick={() => {
+							setShowModal(true);
+						}}>
+						<FaImage /> Set Image
+					</button>
+				</div>
+
+				<Modal
+					show={showModal}
+					onClose={() => {
+						setShowModal(false);
+					}}
+					title="Image Upload">
+					<ImageUpload evtId={id} imageUploaded={imageUploaded} />
+				</Modal>
+			</div>
 		</Layout>
 	);
 }

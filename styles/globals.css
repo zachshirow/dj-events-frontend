@@ -39,6 +39,10 @@ h1 {
 	margin-bottom: 20px;
 }
 
+.text-center {
+	text-align: center;
+}
+
 .btn {
 	display: inline-block;
 	background: red;
@@ -99,4 +103,9 @@ h1 {
 	background-color: #f1f1f1;
 	padding: 10px;
 	border-radius: 5px;
+}
+
+input:disabled {
+	cursor: default;
+	opacity: 0.7;
 }

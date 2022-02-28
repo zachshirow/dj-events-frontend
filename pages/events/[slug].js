@@ -22,8 +22,21 @@ export default function EventPage({ evt }) {
 	console.log("image");
 
 	let image = false;
+	console.log(evt.attributes.image.data);
 	if (evt.attributes.image.data !== null) {
-		image = evt.attributes.image.data.attributes.formats.medium.url;
+		if (evt.attributes.image.data.attributes.formats.large !== undefined) {
+			image = evt.attributes.image.data.attributes.formats.large.url;
+		} else if (
+			evt.attributes.image.data.attributes.formats.medium !== undefined
+		) {
+			image = evt.attributes.image.data.attributes.formats.medium.url;
+		} else if (
+			evt.attributes.image.data.attributes.formats.small !== undefined
+		) {
+			image = evt.attributes.image.data.attributes.formats.small.url;
+		} else {
+			image = evt.attributes.image.data.attributes.formats.thumbnail.url;
+		}
 	}
 
 	async function deleteEvent(e) {

@@ -21,7 +21,7 @@ export default function Modal({ show, onClose, children, title }) {
 						<FaTimes color="black" />
 					</a>
 				</div>
-				{title && <div>{title}</div>}
+				{title && <h2 className={styles.title}>{title}</h2>}
 				<div className={styles.body}>{children}</div>
 			</div>
 		</div>

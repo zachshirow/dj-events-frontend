@@ -8,6 +8,10 @@
 	margin: auto;
 }
 
+.title {
+	border-bottom: 1px solid #f1f1f1;
+}
+
 .header {
 	display: flex;
 	justify-content: flex-end;
