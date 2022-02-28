@@ -1,9 +1,11 @@
 import Layout from "@/components/Layout";
-import { API_URL } from "@/config/index";
+import { API_URL, PER_PAGE } from "@/config/index";
 import EventItem from "@/components/EventItem";
 import qs from "qs";
 
-export default function EventsPage({ events }) {
+import Pagination from "@/components/Pagination";
+
+export default function EventsPage({ events, pagination }) {
 	return (
 		<Layout>
 			<h1>Events</h1>
@@ -11,15 +13,20 @@ export default function EventsPage({ events }) {
 			{events.map((evt) => {
 				return <EventItem key={evt.attributes.slug} evt={evt.attributes} />;
 			})}
+			<Pagination pagination={pagination} />
 		</Layout>
 	);
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps({ query: { page = 1 } }) {
 	const query = qs.stringify(
 		{
 			sort: ["id:DESC"],
 			populate: "image",
+			pagination: {
+				page: page,
+				pageSize: PER_PAGE,
+			},
 		},
 		{
 			encodeValuesOnly: true,
@@ -29,9 +36,9 @@ export async function getStaticProps() {
 	const res = await fetch(`${API_URL}/api/events?${query}`);
 	const resJson = await res.json();
 	const events = resJson.data;
+	const pagination = resJson.meta.pagination;
 
 	return {
-		props: { events },
-		revalidate: 1,
+		props: { events, pagination },
 	};
 }
