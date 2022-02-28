@@ -42,6 +42,12 @@ h1 {
 .text-center {
 	text-align: center;
 }
+.text-right {
+	text-align: right;
+}
+.text-left {
+	text-align: left;
+}
 
 .btn {
 	display: inline-block;
