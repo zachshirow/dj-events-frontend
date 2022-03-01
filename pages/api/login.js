@@ -1,4 +1,5 @@
 import { API_URL } from "@/config/index.js";
+import cookie from "cookie";
 
 const login = async (req, res) => {
 	if (req.method === "POST") {
@@ -18,10 +19,18 @@ const login = async (req, res) => {
 		const data = await strapiRes.json();
 
 		if (strapiRes.ok) {
-			// @todo - set the cookie
+			// @ Set Cookie
+			res.setHeader(
+				"Set-Cookie",
+				cookie.serialize("token", data.jwt, {
+					httpOnly: true,
+					secure: process.env.NODE_ENV !== "development",
+					maxAge: 60 * 60 * 24 * 7,
+					path: "/",
+				})
+			);
 
 			res.status(200).json({ user: data.user });
-			console.log(data.jwt);
 		} else {
 			if (data.error) {
 				const { status, name, message, details } = data.error;
