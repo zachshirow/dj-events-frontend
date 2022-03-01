@@ -19,10 +19,8 @@ export default function EventPage({ evt }) {
 		evt.attributes;
 
 	date = new Date(date).toLocaleDateString("en-US");
-	console.log("image");
 
 	let image = false;
-	console.log(evt.attributes.image.data);
 	if (evt.attributes.image.data !== null) {
 		if (evt.attributes.image.data.attributes.formats.large !== undefined) {
 			image = evt.attributes.image.data.attributes.formats.large.url;
