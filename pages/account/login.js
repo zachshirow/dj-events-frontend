@@ -14,6 +14,8 @@ export default function LoginPage() {
 
 	const { login, error } = useContext(AuthContext);
 
+	useEffect(() => error && toast.error(error));
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		login({ email, password });
@@ -21,11 +23,12 @@ export default function LoginPage() {
 
 	return (
 		<Layout title="User Login">
+			<ToastContainer />
 			<div className={styles.auth}>
 				<h1>
 					<FaUser /> Login
 				</h1>
-				<ToastContainer />
+
 				<form onSubmit={handleSubmit}>
 					<div>
 						<label htmlFor="email">Email</label>
