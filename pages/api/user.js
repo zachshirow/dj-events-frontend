@@ -1,7 +1,7 @@
 import { API_URL } from "@/config/index.js";
 import cookie from "cookie";
 
-const login = async (req, res) => {
+const user = async (req, res) => {
 	if (req.method === "GET") {
 		if (!req.headers.cookie) {
 			res.status(403).json({ message: "Not Authorized" });
@@ -30,4 +30,4 @@ const login = async (req, res) => {
 	}
 };
 
-export default login;
+export default user;

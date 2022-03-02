@@ -15,6 +15,14 @@ export default function RegisterPage() {
 
 	const { register, error } = useContext(AuthContext);
 
+	useEffect(() => {
+		if (error) {
+			for (var x = 0; x < error.length; x++) {
+				toast.error(error[x].message);
+			}
+		}
+	});
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (password !== passwordConfirm) {
@@ -79,7 +87,7 @@ export default function RegisterPage() {
 						/>
 					</div>
 
-					<input type="submit" value="Login" className="btn" />
+					<input type="submit" value="Register" className="btn" />
 				</form>
 
 				<p className="text-center">
